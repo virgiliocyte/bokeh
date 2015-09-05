@@ -556,6 +556,29 @@ def bokeh_app(yaml_file, route='/', handler=None, theme=None):
                 property = 'clicks'
                 handler = app.app.update([({'name':  object_name}, [property])])(handler)
 
+def apply_theme(theme, objects):
+    for name, obj in objects.items():
+        classname = obj.__class__.__name__
+        if classname in theme:
+            rules = theme[classname]
+            for attr, value in rules.items():
+                # setattr(obj, attr, value)
+                set_obj_attr(obj, attr, value)
 
+        if name in theme:
+            rules = theme[name]
+            for attr, value in rules.items():
+                # setattr(obj, attr, value)
+                set_obj_attr(obj, attr, value)
+
+
+def set_obj_attr(obj, attr, v):
+    if "." in attr:
+        attrs = attr.split('.')
+        attr, rest = attrs[0], '.'.join(attrs[1:])
+
+        return set_obj_attr(getattr(obj, attr), rest, v)
+    else:
+        return setattr(obj, attr, v)
 
     return app
