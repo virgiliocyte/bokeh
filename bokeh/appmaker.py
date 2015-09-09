@@ -11,14 +11,16 @@ from .models.widgets import (HBox, VBox, VBoxForm, PreText, DataTable,
 from .models.sources import ColumnDataSource, AjaxDataSource
 from .plotting import figure, show, curdoc
 from .simpleapp import simpleapp, SimpleApp
-
+from copy import deepcopy
 
 def io_constructor(loader, node):
     """
     Use pandas IO tools to easily load local and remote data files
     """
+
     bits = loader.construct_mapping(node, deep=True)
 
+    original_data = dict(bits)
     # Pandas io read method as the key
     read_method = [key for key in bits.keys()][0]
 
@@ -32,6 +34,7 @@ def io_constructor(loader, node):
     if limit is not None:
         ds = ds[:int(limit)]
 
+    ds._original_data = original_data
     return ds
 
 def app_object_constructor(loader, node):
@@ -67,10 +70,12 @@ def app_event_handler(loader, node):
 
 def cds_constructor(loader, node):
     data = loader.construct_mapping(node, deep=True)
+    original_data = dict(data)
 
     cds_data = data.pop('data', {})
     source = ColumnDataSource(data=cds_data, **data)
 
+    source._original_data = original_data
     return source
 
 def ads_constructor(loader, node):
@@ -100,7 +105,7 @@ def figure_constructor(loader, node):
     http://bokeh.pydata.org/en/latest/docs/reference/plotting.html
     """
     figure_data = loader.construct_mapping(node, deep=True)
-
+    original_data = deepcopy(figure_data)
     lazy_evals = get_lazy_evals(figure_data['figure'])
     data = figure_data['figure']
 
@@ -117,6 +122,7 @@ def figure_constructor(loader, node):
     #       been created
 
     p._glyphs = glyphs
+    p._original_data = original_data
 
     return p
 
@@ -139,6 +145,7 @@ class UILoader(SafeLoader):
         def constructor(loader, node):
             prev_obj = loader._prev_obj
             data = loader.construct_mapping(node, deep=True)
+            original_data = deepcopy(data)
 
             if 'name' in data:
                 name = data['name']
@@ -168,11 +175,11 @@ class UILoader(SafeLoader):
 
             widget = widget_class(**data)
             loader._objects[name] = widget
+            widget._original_data = original_data
 
             return widget
 
         cls.add_constructor(tag, constructor)
-
 
 UILoader.add_constructor("!app_object", app_object_constructor)
 UILoader.add_constructor("!figure", figure_constructor)
@@ -515,15 +522,6 @@ class YamlApp(object):
                 v.content = get_obj(v.content, self, layout)
 
         v = v = self._replace_app_box(layout['app'])
-        # v = layout['app']
-        # children = v.children
-        # if isinstance(v, AppHBox):
-        #     v = HBox(children=[])
-        # else:
-        #     v = VBox(children=[])
-        #
-        # for c in children:
-        #     v.children.append(self.get_obj(c))
 
         return v
 
@@ -555,6 +553,7 @@ def bokeh_app(yaml_file, route='/', handler=None, theme=None):
             if isinstance(obj, click_widgets):
                 property = 'clicks'
                 handler = app.app.update([({'name':  object_name}, [property])])(handler)
+    return app
 
 def apply_theme(theme, objects):
     for name, obj in objects.items():
@@ -580,5 +579,3 @@ def set_obj_attr(obj, attr, v):
         return set_obj_attr(getattr(obj, attr), rest, v)
     else:
         return setattr(obj, attr, v)
-
-    return app

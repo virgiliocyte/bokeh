@@ -5,6 +5,7 @@ ContinuumView = require "../common/continuum_view"
 HasProperties = require "../common/has_properties"
 Reloading = require "./reloading"
 ErrorPanel = require "./errorpanel"
+DebugToolbar = require "./debugtoolbar"
 
 class DevelopShellView extends ContinuumView
   initialize: (options) ->
@@ -14,6 +15,8 @@ class DevelopShellView extends ContinuumView
     @$el.append(@reloading_view.el)
     @errorpanel_view = new ErrorPanel.View({ model: @mget("error_panel") })
     @$el.append(@errorpanel_view.el)
+    @debugtoolbar_view = new DebugToolbar.View({ model: @mget("debug_toolbar") })
+    @$el.append(@debugtoolbar_view.el)
     @render()
 
   render: () ->
@@ -26,7 +29,8 @@ class DevelopShell extends HasProperties
   defaults: () ->
     return _.extend {}, super(), {
         reloading: new Reloading.Model(),
-        error_panel: new ErrorPanel.Model()
+        error_panel: new ErrorPanel.Model(),
+        debug_toolbar: new DebugToolbar.Model()
     }
 
 module.exports =

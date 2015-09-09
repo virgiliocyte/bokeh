@@ -173,6 +173,7 @@ locations =
 
   Reloading:                require '../develop/reloading'
   ErrorPanel:               require '../develop/errorpanel'
+  DebugToolbar:             require '../develop/debugtoolbar'
   DevelopShell:             require '../develop/developshell'
 
   ar_transforms:            [require '../ar/transforms']

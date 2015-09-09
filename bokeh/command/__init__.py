@@ -11,6 +11,9 @@ from watchdog.events import FileSystemEventHandler
 
 from .server import Server
 
+from ..server.app import app as flask_app
+from flask import Flask, render_template, jsonify, request
+
 def die(message):
     print(message, file=sys.stderr)
     sys.exit(1)
@@ -130,10 +133,16 @@ class LocalServer(Subcommand):
     def func(self, args):
 
         self.directory = args.directory
-        self.mainpy = os.path.join(self.directory, "main.py")
 
-        if not os.path.exists(self.mainpy):
-            die("No 'main.py' found in %s." % (self.directory))
+        if os.path.isfile(self.directory):
+            self.mainpy = os.path.basename(self.directory)
+            self.directory = os.path.dirname(self.directory)
+
+        else:
+            self.mainpy = os.path.join(self.directory, "main.py")
+
+            if not os.path.exists(self.mainpy):
+                die("No 'main.py' found in %s." % (self.directory))
 
         # this allows apps to refer to relative files in their directory,
         # but it prohibits multiple apps in the same process...
@@ -170,6 +179,7 @@ class LocalServer(Subcommand):
         observer.stop()
         observer.join()
 
+
 class Develop(LocalServer):
     name = "develop"
     help = "Run a Bokeh server in developer mode"
@@ -177,6 +187,63 @@ class Develop(LocalServer):
     def __init__(self, **kwargs):
         super(Develop, self).__init__(**kwargs)
         self.develop_mode = True
+
+    def load(self, src_path):
+        if src_path.lower().endswith('.yaml'):
+            from ..appmaker import bokeh_app, curdoc, SimpleApp
+
+            self.yaml_app = bokeh_app(
+                os.path.join(self.directory, src_path)
+            )
+            curdoc().clear()
+            app = SimpleApp.create(
+                self.yaml_app.app.name,
+                self.yaml_app.app.widgets
+            )
+            curdoc().add(app)
+
+        else:
+            import ast
+            from types import ModuleType
+            source = open(src_path, 'r').read()
+            nodes = ast.parse(source, src_path)
+            code = compile(nodes, filename=src_path, mode='exec')
+            self.app_module = ModuleType(self.appname)
+            self.app_module.__dict__['__file__'] = src_path
+            exec(code, self.app_module.__dict__)
+
+
+        @flask_app.route('/appmaker')
+        def appmaker():
+            from json import dumps
+
+            sources = []
+            models = []
+            yaml_app = {
+                "file" : src_path,
+            }
+            sections = ['datasets', 'ui', 'layout', 'event_handlers']
+            d = {k: [] for k in sections}
+            for section in sections:
+                for k, ds in self.yaml_app.yapp.get(section,{}).items():
+                    d[section].append({
+                        'data': ds._original_data,
+                        'name': k,
+                        'type': ds.__class__.__name__,
+                        'object': str(ds),
+                        })
+
+                d[section] = dumps(d[section])
+            for k, v in self.yaml_app.yapp.items():
+                if k not in sections + ['widgets']:
+                    yaml_app[k] = v
+
+            models = dumps(models)
+            return render_template(
+                'appmaker.html',
+                yaml_app = yaml_app,
+                **d
+            )
 
 class Run(LocalServer):
     name = "run"

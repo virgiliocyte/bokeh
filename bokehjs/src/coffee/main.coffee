@@ -132,6 +132,7 @@ Bokeh.TextInput      = require("./widget/text_input")
 # develop mode
 Bokeh.Reloading       = require("./develop/reloading")
 Bokeh.ErrorPanel      = require("./develop/errorpanel")
+Bokeh.DebugToolbar      = require("./develop/debugtoolbar")
 
 # Add the jquery plugin
 require("./api/plugin")
