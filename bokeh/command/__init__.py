@@ -183,6 +183,7 @@ class LocalServer(Subcommand):
 class Develop(LocalServer):
     name = "develop"
     help = "Run a Bokeh server in developer mode"
+    registered_flask = False
 
     def __init__(self, **kwargs):
         super(Develop, self).__init__(**kwargs)
@@ -213,37 +214,39 @@ class Develop(LocalServer):
             exec(code, self.app_module.__dict__)
 
 
-        @flask_app.route('/appmaker')
-        def appmaker():
-            from json import dumps
+        if not self.registered_flask:
+            @flask_app.route('/appmaker')
+            def appmaker():
+                from json import dumps
 
-            sources = []
-            models = []
-            yaml_app = {
-                "file" : src_path,
-            }
-            sections = ['datasets', 'ui', 'layout', 'event_handlers']
-            d = {k: [] for k in sections}
-            for section in sections:
-                for k, ds in self.yaml_app.yapp.get(section,{}).items():
-                    d[section].append({
-                        'data': ds._original_data,
-                        'name': k,
-                        'type': ds.__class__.__name__,
-                        'object': str(ds),
-                        })
+                sources = []
+                models = []
+                yaml_app = {
+                    "file" : src_path,
+                }
+                sections = ['datasets', 'ui', 'layout', 'event_handlers']
+                d = {k: [] for k in sections}
+                for section in sections:
+                    for k, ds in self.yaml_app.yapp.get(section,{}).items():
+                        d[section].append({
+                            'data': ds._original_data,
+                            'name': k,
+                            'type': ds.__class__.__name__,
+                            'object': str(ds),
+                            })
 
-                d[section] = dumps(d[section])
-            for k, v in self.yaml_app.yapp.items():
-                if k not in sections + ['widgets']:
-                    yaml_app[k] = v
+                    d[section] = dumps(d[section])
+                for k, v in self.yaml_app.yapp.items():
+                    if k not in sections + ['widgets']:
+                        yaml_app[k] = v
 
-            models = dumps(models)
-            return render_template(
-                'appmaker.html',
-                yaml_app = yaml_app,
-                **d
-            )
+                models = dumps(models)
+                return render_template(
+                    'appmaker.html',
+                    yaml_app = yaml_app,
+                    **d
+                )
+        self.__class__.registered_flask = True
 
 class Run(LocalServer):
     name = "run"
