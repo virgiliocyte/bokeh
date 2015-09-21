@@ -1,0 +1,158 @@
+/*Override this file to add custom rules*/
+
+.topbar{
+    background-color: #9f9e9e;
+    height: 40px;
+    font-family: verdana;
+}
+
+button.topbutton{
+    background-color: #9f9e9e;
+    height: 30px;
+    border-color: #9f9e9e;
+    margin-top: 3px;
+    font-family: verdana;
+}
+
+.apptitle{
+    margin-top: 0.2em;
+    font-size: 1.5em;
+    color: #3d1d5a;
+    font-weight: bold;
+}
+
+.appsearch{
+    margin-top: -15px;
+    height: 30px;
+}
+
+.appsearch input.bk-widget-form-input{
+    /*margin-top: -15px;*/
+    height: 30px;
+}
+
+ul.bk-bs-nav-tabs {
+    border-bottom: 1px solid transparent;
+}
+
+ul.bk-bs-nav-tabs > li{
+    float: right;
+    margin-bottom: -1px;
+}
+
+ul.bk-bs-nav-tabs>li.bk-bs-active>a, ul.bk-bs-nav-tabs>li.bk-bs-active>a:hover, ul.bk-bs-nav-tabs>li.bk-bs-active>a:focus {
+    color: #764c9e;
+    background-color: #000000;
+    /*border: 1px solid #ddd;*/
+    border-bottom-color: transparent;
+    cursor: default;
+    text-decoration: none;
+    font-family: 'Verdana';
+    padding-top: 6px;
+
+    height: 30px;
+    float: right;
+}
+
+ul.bk-bs-nav-tabs > li.bk-bs-active > a, ul.bk-bs-nav-tabs > li.bk-bs-active > a:hover, ul.bk-bs-nav-tabs > li.bk-bs-active > a:focus{
+    border: 1px solid transparent;
+}
+
+ul.bk-bs-nav-tabs>li>a {
+    color: #939597;
+    background-color: #222222;
+    margin-right: 2px;
+    line-height: 1.42857143;
+    /*border: 1px solid transparent;*/
+    /*border-radius: 4px 4px 0 0;*/
+    text-decoration: none;
+    color: #555;
+    padding-top: 6px;
+
+    height: 30px;
+    float: right;
+    font-family: 'Verdana';
+}
+
+.plottitle{
+    color: #29bdbc;
+    font-family: verdana;
+    font-size: 14pt;
+}
+
+.tablebox{
+    background-color: #666666;
+}
+
+/* ---- 4 Slick Grid ----*/
+
+div.bk-slick-row.odd{
+    background: #666666;
+    border: 1px solid #000000;
+    color: #9f9e9e;
+}
+div.bk-slick-row.even{
+    background: #666666;
+    border: 1px solid #000000;
+    color: #9f9e9e;
+}
+
+div.bk-slick-cell {
+    margin-top: 1px;
+    border: none;
+    font-size: 12.5px;
+    letter-spacing: 0.02em;
+    border-right: 1px solid #000000;
+    color: #9f9e9e;
+}
+div.bk-slick-row:hover,
+div.bk-slick-row:hover + div{
+  border-top: 2px solid #588ED7;
+  margin-top: -2px;
+  height: 23px;
+}
+div.bk-slick-row:hover + div{
+  margin-top: -2px;
+  height: 23px;
+}
+div.bk-slick-row:hover > div:first-child{
+  font-weight: bolder;
+}
+
+div.bk-slick-header-columns{
+    border-bottom: 0px solid silver;
+}
+
+
+div.bk-slick-header-column {
+     background-image: none;
+    background-color: #9f9e9e;
+}
+
+div.bk-data-table div.bk-ui-state-default{
+    border: 1px solid #9f9e9e;
+}
+
+
+
+div.bk-slick-viewport{
+  border-left: 1px solid #999;
+}
+/*.bk-slick-row.visited {*/
+    /*font-weight:200;*/
+  /*-webkit-font-smoothing:antialiased;*/
+  /*color: #C8B067;*/
+/*}*/
+
+div.bk-slick-header-column:hover{
+background: #e2edc9;
+background: -moz-linear-gradient(top,  #e2edc9 0%, #c7ceb7 50%, #cfe0c3 100%);
+background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#e2edc9), color-stop(50%,#c7ceb7), color-stop(100%,#cfe0c3));
+background: -webkit-linear-gradient(top,  #e2edc9 0%,#c7ceb7 50%,#cfe0c3 100%);
+background: -o-linear-gradient(top,  #e2edc9 0%,#c7ceb7 50%,#cfe0c3 100%);
+background: -ms-linear-gradient(top,  #e2edc9 0%,#c7ceb7 50%,#cfe0c3 100%);
+background: linear-gradient(to bottom,  #e2edc9 0%,#c7ceb7 50%,#cfe0c3 100%);
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e2edc9', endColorstr='#cfe0c3',GradientType=0 );
+}
+
+/* ---- end 4 Slick Grid ----*/
