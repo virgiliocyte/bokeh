@@ -7,7 +7,7 @@ these widgets.
 from __future__ import absolute_import
 
 from ..plot_object import PlotObject
-from ..properties import Bool
+from ..properties import Bool, List, String
 from ..embed import notebook_div
 
 class Widget(PlotObject):
@@ -20,6 +20,8 @@ class Widget(PlotObject):
     Whether the widget will be disabled when rendered. If ``True``,
     the widget will be greyed-out, and not respond to UI events.
     """)
+
+    classes = List(String)
 
     # TODO: (mp) Not yet, because it breaks plotting/notebook examples.
     # Rename to _repr_html_ if we decide to enable this by default.

@@ -21,6 +21,11 @@ class ButtonView extends ContinuumView
       for own key, val of @views
         val.$el.detach()
 
+    classes = @mget('classes')
+    if classes?
+      for classname in classes
+        @$el.addClass(classname)
+
     @$el.empty()
     @$el.addClass("bk-bs-btn")
     @$el.addClass("bk-bs-btn-" + @mget("type"))
@@ -45,6 +50,7 @@ class Button extends HasParent
 
   defaults: () ->
     return _.extend {}, super(), {
+      classes: []
       clicks: 0
       label: "Button"
       icon: null

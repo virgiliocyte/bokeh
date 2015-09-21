@@ -19,6 +19,11 @@ class TextInputView extends ContinuumView
     @listenTo(@model, 'change', @render)
 
   render: () ->
+    classes = @mget('classes')
+    if classes?
+      for classname in classes
+        @$el.addClass(classname)
+
     @$el.html(@template(@model.attributes))
     return @
 
@@ -38,6 +43,7 @@ class TextInput extends HasParent
       name: ""
       value: ""
       title: ""
+      classes: []
     }
 
 module.exports =

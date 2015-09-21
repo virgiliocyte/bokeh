@@ -11,6 +11,11 @@ class ParagraphView extends ContinuumView
     @listenTo(@model, 'change', @render)
 
   render: () ->
+    classes = @mget('classes')
+    if classes?
+      for classname in classes
+        @$el.addClass(classname)
+
     if @mget('height')
       @$el.height(@mget('height'))
     if @mget('width')
@@ -24,6 +29,7 @@ class Paragraph extends HasParent
 
   defaults: () ->
     return _.extend {}, super(), {
+      classes: []
       text: ''
     }
 

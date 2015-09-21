@@ -1,7 +1,3 @@
 <div class="bk-debug-toolbar">
-  <div id="debugtoolbar_icon" target="_blank" class="bk-logo bk-logo-small"></div>
-
-  <h2>Bokeh Debug Toolbar</h2>
-  <pre><%= @error %></pre>
-  <a class="bk-error-expand-hint">Expand below for the full traceback...</a>
+  <div id="debugtoolbar_icon" target="_blank" class="bk-logo bk-logo-small" style="right: 1%"></div>
 </div>

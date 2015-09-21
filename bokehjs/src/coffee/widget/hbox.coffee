@@ -15,6 +15,11 @@ class HBoxView extends ContinuumView
     @listenTo(@model, 'change', @render)
 
   render: () ->
+    classes = @mget('classes')
+    if classes?
+      for classname in classes
+        @$el.addClass(classname)
+
     children = @model.children()
     build_views(@views, children)
     for own key, val of @views
@@ -36,6 +41,7 @@ class HBox extends HasParent
   defaults: ->
     return _.extend {}, super(), {
       children: []
+      classes: []
     }
 
   children: () ->
