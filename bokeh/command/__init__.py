@@ -21,9 +21,10 @@ def die(message):
 class Subcommand(object):
     """Abstract base class for subcommands"""
 
-    def __init__(self, parser):
+    def __init__(self, parser, args):
         """Initialize the subcommand with its parser; can call parser.add_argument to add subcommand flags"""
         self.parser = parser
+        self.args = args
 
     def func(self, args):
         """Takes over main program flow to perform the subcommand"""
@@ -53,10 +54,13 @@ class LocalServer(Subcommand):
 
     def __init__(self, **kwargs):
         super(LocalServer, self).__init__(**kwargs)
-        self.parser.add_argument('--port', metavar='PORT', type=int, help="Port to listen on", default=-1)
+        self.parser.add_argument('--port', metavar='PORT', type=int, help="Port to listen on", default=5006)
         self.parser.add_argument('directory', nargs='?',  metavar='APPDIR', help="The app directory (current directory if not specified)",
                                  default=os.getcwd())
-        self.port = 5006
+
+        bb = self.parser.parse_args(self.args)
+
+        self.port = bb.port
         self.develop_mode = False
         self.server = None
         self.app_module = None
@@ -265,10 +269,14 @@ def main(argv):
     if not version:
         version = "unknown version"
     parser.add_argument('-v', '--version', action='version', version=version)
+    parser.add_argument('-p', '--port', action='store', dest='port', default='5006')
+
     subs = parser.add_subparsers(help="Sub-commands")
+
     for klass in subcommands:
         c_parser = subs.add_parser(klass.name, help=klass.help)
-        c = klass(parser=c_parser)
+        # import pdb; pdb.set_trace()
+        c = klass(parser=c_parser, args=argv[3:])
         c_parser.set_defaults(func=c.func)
 
     args = parser.parse_args(argv[1:])
