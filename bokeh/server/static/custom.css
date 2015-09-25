@@ -84,6 +84,33 @@ ul.bk-bs-nav-tabs>li>a {
     background-color: #666666;
 }
 
+
+/* ---- 5 Hover Tool ----*/
+div.bk-tooltip {
+  position: absolute;
+  padding: 5px;
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  background-color: rgba(255, 255, 255, 0.6);
+  border-radius: 5px;
+  pointer-events: none;
+    color: rgba(20, 20, 20, 0.86);
+}
+
+td.bk-tooltip-row-label {
+  color: rgba(20, 20, 20, 0.86);
+  font-family: Helvetica, sans-serif;
+  text-align: left;
+    font-size: 0.8em;
+}
+
+td.bk-tooltip-row-value {
+  color: rgba(20, 20, 20, 0.86);
+  font-family: Helvetica, sans-serif;
+    font-size: 0.8em;
+    text-align: left;
+}
+/* ---- 5 END Hover Tool ----*/
+
 /* ---- 4 Slick Grid ----*/
 
 div.bk-slick-row.odd{
@@ -159,3 +186,4 @@ div.bk-develop-shell{
     background-color: #4c4c4c;
 }
 /* ---- end 4 Slick Grid ----*/
+

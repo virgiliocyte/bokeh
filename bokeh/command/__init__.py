@@ -163,11 +163,12 @@ class LocalServer(Subcommand):
         else:
             print("Starting %s in production mode on port %d" % (self.appname, self.port))
 
-        event_handler = FileChangeHandler(self)
-        observer = Observer()
-        observer.schedule(event_handler, self.directory, recursive=True)
-        observer.start()
-
+        #
+        # event_handler = FileChangeHandler(self)
+        # observer = Observer()
+        # observer.schedule(event_handler, self.directory, recursive=True)
+        # observer.start()
+        #
         self.server = Server(port=self.port, appname=self.appname)
 
         self.refresh(open_browser=True)
@@ -176,8 +177,8 @@ class LocalServer(Subcommand):
             self.server.waitFor()
         except KeyboardInterrupt:
             self.server.stop()
-        observer.stop()
-        observer.join()
+        # observer.stop()
+        # observer.join()
 
 
 class Develop(LocalServer):
