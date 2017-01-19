@@ -98,6 +98,8 @@
     "@types/timezone-js": "^0.0.28",
     "@types/hammerjs": "^2.0.33",
 
+    "nouislider": "^9.2.0",
+
     "underscore": "^1.5.2",
     "jquery": "^2.1.1",
     "jquery-mousewheel": "^3.1.12",
