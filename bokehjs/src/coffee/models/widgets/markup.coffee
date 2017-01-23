@@ -3,7 +3,6 @@ import * as p from "../../core/properties"
 import {Widget, WidgetView} from "./widget"
 import template from "./markup_template"
 
-
 export class MarkupView extends WidgetView
   template: template
 
@@ -14,13 +13,12 @@ export class MarkupView extends WidgetView
 
   render: () ->
     super()
+
     @$el.empty()
     @$el.html(@template())
-    if @model.height
-      @$el.height(@model.height)
-    if @model.width
-      @$el.width(@model.width)
 
+    if @model.background_color?
+      @el.style.backgroundColor = @model.background_color
 
 export class Markup extends Widget
   type: "Markup"
@@ -30,4 +28,8 @@ export class Markup extends Widget
 
   @define {
     text: [ p.String, '' ]
+  }
+
+  @define {
+    background_color: [ p.Color ]
   }

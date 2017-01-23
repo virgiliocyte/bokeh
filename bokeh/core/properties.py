@@ -356,8 +356,8 @@ class Regex(String):
             >>> m.prop = [1, 2, 3]  # ValueError !!
 
     '''
-    def __init__(self, regex, default=None, help=None):
-        self.regex = re.compile(regex)
+    def __init__(self, pattern, flags=0, default=None, help=None):
+        self.regex = re.compile(pattern, flags)
         super(Regex, self).__init__(default=default, help=help)
 
     def __str__(self):
