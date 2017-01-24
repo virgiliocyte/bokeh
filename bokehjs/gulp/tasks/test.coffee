@@ -25,6 +25,9 @@ mocha = (options={}) ->
           @emit("end")
   )
 
+gulp.task "test:defaults", ["defaults:generate"], () ->
+  gulp.src(["./test/common/defaults.coffee"]).pipe(mocha())
+
 gulp.task "test", ["defaults:generate"], () ->
   gulp.src(["./test/all.coffee"]).pipe(mocha())
 
