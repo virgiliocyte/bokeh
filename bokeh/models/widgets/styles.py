@@ -4,9 +4,9 @@ from __future__ import absolute_import
 
 import re
 
-from ..core.has_props import HasProps
-from ..core.properties import abstract
-from ..core.properties import String, Regex, Int, Float, Enum, Tuple, Either as Or, Color, Auto
+from ...core.has_props import HasProps
+from ...core.properties import abstract
+from ...core.properties import String, Regex, Int, Float, Enum, Tuple, Either as Or, Color, Auto
 
 Length = Regex("^[0-9]+(\.[0-9]+)?(em|ex|ch|ic|rem|vw|vh|vi|vb|vmin|vmax|cm|mm|q|in|pc|pt|px)$", re.I)
 Percentage = Regex("^[0-9]+(\.[0-9]+)?%$")
@@ -23,7 +23,7 @@ def OneOrTwo(tp):
     return Or(tp, Tuple(tp, tp))
 
 @abstract
-class CSS3(HasProps):
+class Styles(HasProps):
 
     # background = TODO
     background_attachment = Enum("scroll", "fixed", "local")

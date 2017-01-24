@@ -5,11 +5,11 @@ from __future__ import absolute_import
 
 from ...core.properties import abstract
 from ...core.properties import String, Bool, Color
-from ..styles import CSS3
 from .widget import Widget
+from .styles import Styles
 
 @abstract
-class Markup(Widget, CSS3):
+class Markup(Widget, Styles):
     """ Base class for HTML markup widget models. """
 
     text = String(default="", help="""
