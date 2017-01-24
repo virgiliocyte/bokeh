@@ -1,19 +1,21 @@
-""" Various kinds of input widgets and form controls.
+''' Various kinds of input widgets and form controls.
 
-"""
+'''
 from __future__ import absolute_import
 
-from ...core.properties import abstract
-from ...core.properties import Bool, Int, Float, String, Date, RelativeDelta, Enum, List, Tuple, Either, Instance
+from ...core.enums import SliderCallbackPolicy
+from ...core.has_props import abstract
+from ...core.properties import Bool, Date, Either, Enum, Float, Instance, Int, List, RelativeDelta, String, Tuple
+
 from ..callbacks import Callback
+
 from .widget import Widget
 
 @abstract
 class InputWidget(Widget):
-    """ Abstract base class for input widgets. `InputWidget`` is not
-    generally useful to instantiate on its own.
+    ''' Abstract base class for input widgets.
 
-    """
+    '''
 
     title = String(default="", help="""
     Widget's label.
@@ -32,7 +34,9 @@ class InputWidget(Widget):
             return val
 
 class TextInput(InputWidget):
-    """ Single-line input widget. """
+    ''' Single-line input widget.
+
+    '''
 
     value = String(default="", help="""
     Initial or entered text value.
@@ -49,7 +53,9 @@ class TextInput(InputWidget):
 
 
 class AutocompleteInput(TextInput):
-    """ Single-line input widget with auto-completion. """
+    ''' Single-line input widget with auto-completion.
+
+    '''
 
     completions = List(String, help="""
     A list of completion strings. This will be used to guide the
@@ -58,9 +64,9 @@ class AutocompleteInput(TextInput):
 
 
 class Select(InputWidget):
-    """ Single-select widget.
+    ''' Single-select widget.
 
-    """
+    '''
 
     options = List(Either(String, Tuple(String, String)), help="""
     Available selection options. Options may be provided either as a list of
@@ -79,9 +85,9 @@ class Select(InputWidget):
     """)
 
 class MultiSelect(InputWidget):
-    """ Multi-select widget.
+    ''' Multi-select widget.
 
-    """
+    '''
 
     options = List(Either(String, Tuple(String, String)), help="""
     Available selection options. Options may be provided either as a list of
@@ -106,9 +112,9 @@ class MultiSelect(InputWidget):
     """)
 
 class DatePicker(InputWidget):
-    """ Calendar-based date picker widget.
+    ''' Calendar-based date picker widget.
 
-    """
+    '''
 
     value = Date(help="""
     The initial or picked date.
