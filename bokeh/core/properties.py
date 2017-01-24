@@ -1036,7 +1036,7 @@ class Date(Property):
     ''' Accept Date (not datetime) values.
 
     '''
-    def __init__(self, default=datetime.date.today(), help=None):
+    def __init__(self, default=None, help=None):
         super(Date, self).__init__(default=default, help=help)
 
     def transform(self, value):
