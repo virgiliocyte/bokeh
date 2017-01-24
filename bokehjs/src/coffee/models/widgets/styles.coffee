@@ -2,6 +2,7 @@ import {Model} from "../../model"
 import * as p from "../../core/properties"
 
 export class Styles extends Model
+  type: "Styles"
 
   @define {
     background: [ p.Any ]
