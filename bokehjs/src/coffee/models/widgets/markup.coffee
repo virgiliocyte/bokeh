@@ -1,6 +1,7 @@
 import * as p from "../../core/properties"
 
 import {Widget, WidgetView} from "./widget"
+import {Styles} from "./styles"
 import template from "./markup_template"
 
 export class MarkupView extends WidgetView
@@ -10,6 +11,7 @@ export class MarkupView extends WidgetView
     super(options)
     @render()
     @listenTo(@model, 'change', @render)
+    @listenTo(@model.style, 'change', @render)
 
   render: () ->
     super()
@@ -17,8 +19,8 @@ export class MarkupView extends WidgetView
     @$el.empty()
     @$el.html(@template())
 
-    if @model.background_color?
-      @el.style.backgroundColor = @model.background_color
+    if @model.style.background_color?
+      @el.style.backgroundColor = @model.style.background_color
 
 export class Markup extends Widget
   type: "Markup"
@@ -28,8 +30,5 @@ export class Markup extends Widget
 
   @define {
     text: [ p.String, '' ]
-  }
-
-  @define {
-    background_color: [ p.Color ]
+    style: [ p.Instance, () -> new Styles() ]
   }

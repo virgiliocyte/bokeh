@@ -4,18 +4,19 @@
 from __future__ import absolute_import
 
 from ...core.properties import abstract
-from ...core.properties import String, Bool, Color
+from ...core.properties import String, Bool, Instance
 from .widget import Widget
 from .styles import Styles
 
 @abstract
-class Markup(Widget, Styles):
+class Markup(Widget):
     """ Base class for HTML markup widget models. """
 
     text = String(default="", help="""
     The contents of the widget.
     """)
 
+    style = Instance(Styles, lambda: Styles())
 
 class Paragraph(Markup):
     """ A block (paragraph) of text.

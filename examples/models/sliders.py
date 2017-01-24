@@ -28,10 +28,11 @@ def color_picker():
     green = color_slider("green")
     blue  = color_slider("blue")
 
-    div = Div(width=100, height=100, background_color=(127, 127, 127))
+    div = Div(width=100, height=100)
+    div.style.background_color=(127, 127, 127)
 
     cb = CustomJS(args=dict(red=red, green=green, blue=blue, div=div), code="""
-      div.background_color = "rgb(" + red.value + ", " + green.value + ", " + blue.value + ")";
+      div.style.background_color = "rgb(" + red.value + ", " + green.value + ", " + blue.value + ")";
     """)
 
     red.callback   = cb
