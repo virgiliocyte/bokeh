@@ -1,6 +1,9 @@
 import {format} from "numbro"
 
 import {AbstractSlider, AbstractSliderView} from "./abstract_slider"
+import {logger} from "core/logging"
+import * as p from "core/properties"
+import {throttle} from "core/util/callback"
 
 export class RangeSliderView extends AbstractSliderView
 

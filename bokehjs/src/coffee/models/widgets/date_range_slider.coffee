@@ -1,6 +1,8 @@
 import * as tz from "timezone"
 
 import {AbstractSlider, AbstractSliderView} from "./abstract_slider"
+import * as p from "core/properties"
+import {isObject} from "core/util/types"
 
 export class DateRangeSliderView extends AbstractSliderView
 
