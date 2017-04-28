@@ -24,5 +24,3 @@
 
 - path: "howto/charts"
   skip: all
-
-- path: "howto/layouts"

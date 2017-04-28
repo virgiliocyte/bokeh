@@ -20,10 +20,14 @@ export class CartesianFrame extends LayoutCanvas
 
     return null
 
+  _doc_attached: () ->
+    @listenTo(@document.solver(), 'layout_update', () => @_update_mappers())
+    return null
+
   contains: (vx, vy) ->
     return (
-      vx >= @_left.value   and vx <= @_right.value and
-      vy >= @_bottom.value and vy <= @_top.value
+      vx >= @left and vx <= @right and
+      vy >= @bottom and vy <= @top
     )
 
   map_to_screen: (x, y, canvas, x_name='default', y_name='default') ->
@@ -63,8 +67,8 @@ export class CartesianFrame extends LayoutCanvas
     return mappers
 
   _configure_frame_ranges: () ->
-    @_h_range = new Range1d({start: @_left.value,   end: @_left.value   + @_width.value})
-    @_v_range = new Range1d({start: @_bottom.value, end: @_bottom.value + @_height.value})
+    @_h_range = new Range1d({start: @left,   end: @left   + @width})
+    @_v_range = new Range1d({start: @bottom, end: @bottom + @height})
 
   _configure_mappers: () ->
     @_configure_frame_ranges()
@@ -103,13 +107,13 @@ export class CartesianFrame extends LayoutCanvas
   }
 
   get_constraints: () ->
-    return [
-      GE(@_top),
-      GE(@_bottom),
-      GE(@_left),
-      GE(@_right),
-      GE(@_width),
-      GE(@_height),
-      EQ(@_left, @_width, [-1, @_right]),
-      EQ(@_bottom, @_height, [-1, @_top]),
-    ]
+    constraints = []
+    constraints.push(GE(@_top))
+    constraints.push(GE(@_bottom))
+    constraints.push(GE(@_left))
+    constraints.push(GE(@_right))
+    constraints.push(GE(@_width))
+    constraints.push(GE(@_height))
+    constraints.push(EQ(@_left, @_width, [-1, @_right]))
+    constraints.push(EQ(@_bottom, @_height, [-1, @_top]))
+    return constraints

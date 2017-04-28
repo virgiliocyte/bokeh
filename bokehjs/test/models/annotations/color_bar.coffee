@@ -29,7 +29,6 @@ describe "ColorBar module", ->
        x_range: new Range1d({start: 0, end: 1})
        y_range: new Range1d({start: 0, end: 1})
     })
-    @plot_view = new @plot.default_view({model: @plot, parent: null})
 
     @color_bar = new ColorBar()
 
@@ -37,8 +36,8 @@ describe "ColorBar module", ->
 
     beforeEach ->
       # Stub solver computed values with deterministic frame height and width
-      Object.defineProperty(@plot.plot_canvas.frame._height, 'value', { get: () -> 500 })
-      Object.defineProperty(@plot.plot_canvas.frame._width, 'value', { get: () -> 500 })
+      Object.defineProperty(@plot.plot_canvas.frame, 'height', { get: () -> 500 })
+      Object.defineProperty(@plot.plot_canvas.frame, 'width', { get: () -> 500 })
 
     describe "ColorBar._title_extent method", ->
 
@@ -258,12 +257,11 @@ describe "ColorBar module", ->
       document = new Document()
       document.add_root(@plot)
 
-      @plot_canvas_view = new @plot.plot_canvas.default_view({model: @plot.plot_canvas, parent: @plot_view})
+      @plot_canvas_view = new @plot.plot_canvas.default_view({ model: @plot.plot_canvas })
 
       @color_bar_view = new @color_bar.default_view({
         model: @color_bar
         plot_view: @plot_canvas_view
-        parent: @plot_canvas_view
       })
 
     it "Should reset scale image if color_mapper changes", ->

@@ -13,10 +13,14 @@ class Message
     @buffers = []
 
   @assemble : (header_json, metadata_json, content_json) ->
-    header = JSON.parse(header_json)
-    metadata = JSON.parse(metadata_json)
-    content = JSON.parse(content_json)
-    new Message(header, metadata, content)
+    try
+      header = JSON.parse(header_json)
+      metadata = JSON.parse(metadata_json)
+      content = JSON.parse(content_json)
+      new Message(header, metadata, content)
+    catch e
+      logger.error("Failure parsing json #{e} #{header_json} #{metadata_json} #{content_json}", e)
+      throw e
 
   @create_header : (msgtype, options) ->
     header = {
@@ -32,12 +36,16 @@ class Message
     new Message(header, {}, content)
 
   send : (socket) ->
-    header_json = JSON.stringify(@header)
-    metadata_json = JSON.stringify(@metadata)
-    content_json = JSON.stringify(@content)
-    socket.send(header_json)
-    socket.send(metadata_json)
-    socket.send(content_json)
+    try
+      header_json = JSON.stringify(@header)
+      metadata_json = JSON.stringify(@metadata)
+      content_json = JSON.stringify(@content)
+      socket.send(header_json)
+      socket.send(metadata_json)
+      socket.send(content_json)
+    catch e
+      logger.error("Error sending ", @, e)
+      throw e
 
   complete : ->
     if @header? and @metadata? and @content?
@@ -80,7 +88,7 @@ message_handlers = {
       session._handle_patch(message)
 
   'OK' : (connection, message) ->
-    logger.trace("Unhandled OK reply to #{message.reqid()}")
+    logger.debug("Unhandled OK reply to #{message.reqid()}")
 
   'ERROR' : (connection, message) ->
     logger.error("Unhandled ERROR reply to #{message.reqid()}: #{message.content['text']}")
@@ -135,7 +143,7 @@ class ClientConnection
       new Promise (resolve, reject) =>
         # "arraybuffer" gives us binary data we can look at;
         # if we just needed an opaque blob we could use "blob"
-        @socket.binaryType = "arraybuffer"
+        @socket.binarytype = "arraybuffer"
         @socket.onopen = () => @_on_open(resolve, reject)
         @socket.onmessage = (event) => @_on_message(event)
         @socket.onclose = (event) => @_on_close(event)
@@ -172,9 +180,12 @@ class ClientConnection
     setTimeout retry, milliseconds
 
   send : (message) ->
-    if @socket == null
-      throw new Error("not connected so cannot send #{message}")
-    message.send(@socket)
+    try
+      if @socket == null
+        throw new Error("not connected so cannot send #{message}")
+      message.send(@socket)
+    catch e
+      logger.error("Error sending message ", e, message)
 
   send_event : (event) ->
     message = Message.create('EVENT', {}, JSON.stringify(event))
@@ -255,7 +266,10 @@ class ClientConnection
       @_awaiting_ack_handler(message)
 
   _on_message : (event) ->
-    @_on_message_unchecked(event)
+    try
+      @_on_message_unchecked(event)
+    catch e
+      logger.error("Error handling message: #{e}, #{event}")
 
   _on_message_unchecked : (event) ->
     if not @_current_handler?

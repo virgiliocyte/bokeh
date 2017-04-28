@@ -26,6 +26,8 @@ export class HoverToolView extends InspectToolView
     for r in @model.computed_renderers
       @listenTo(r.data_source, 'inspect', @_update)
 
+    @plot_view.canvas_view.el.style.cursor = "crosshair"
+
   _clear: () ->
 
     @_inspect(Infinity, Infinity)
@@ -75,9 +77,6 @@ export class HoverToolView extends InspectToolView
     return
 
   _update: (indices, tool, renderer, ds, {geometry}) ->
-    if not @model.active
-      return
-
     tooltip = @model.ttmodels[renderer.model.id] ? null
     if not tooltip?
       return
@@ -242,7 +241,7 @@ export class HoverToolView extends InspectToolView
     tooltips = @model.tooltips
     if isString(tooltips)
       el = div()
-      el.innerHTML = replace_placeholders(tooltips, ds, i, @model.formatters, vars)
+      el.innerHTML = replace_placeholders(tooltips, ds, i, vars)
       return el
     else if isFunction(tooltips)
       return tooltips(ds, vars)
@@ -283,7 +282,7 @@ export class HoverToolView extends InspectToolView
         else
           value = value.replace("$~", "$data_")
           el = span()
-          el.innerHTML = replace_placeholders(value, ds, i, @model.formatters, vars)
+          el.innerHTML = replace_placeholders(value, ds, i, vars)
           cell.appendChild(el)
 
       return rows
@@ -301,7 +300,6 @@ export class HoverTool extends InspectTool
           ["data (x, y)",   "($x, $y)"]
           ["canvas (x, y)", "($sx, $sy)"]
         ] ] # TODO (bev)
-      formatters:   [ p.Any,    {}             ]
       renderers:    [ p.Array,  []             ]
       names:        [ p.Array,  []             ]
       mode:         [ p.String, 'mouse'        ] # TODO (bev)

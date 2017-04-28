@@ -58,7 +58,7 @@ export class GlyphRendererView extends RendererView
       @model.data_source.setup(@plot_view, @glyph)
 
   build_glyph_view: (model) ->
-    new model.default_view({model: model, renderer: @, plot_view: @plot_view, parent: @})
+    new model.default_view({model: model, renderer: @, plot_view: @plot_view})
 
   bind_bokeh_events: () ->
     @listenTo(@model, 'change', @request_render)
@@ -230,7 +230,7 @@ export class GlyphRendererView extends RendererView
     @glyph.draw_legend_for_index(ctx, x0, x1, y0, y1, index)
 
   hit_test: (geometry) ->
-    return @model.hit_test_helper(geometry, @glyph)
+    @glyph.hit_test(geometry)
 
 
 export class GlyphRenderer extends Renderer
@@ -247,13 +247,6 @@ export class GlyphRenderer extends Renderer
         if i > 0
           index = i
     return index
-
-  # TODO (bev) this is just to make testing easier. Might be better on a view model
-  hit_test_helper: (geometry, glyph) ->
-    if @visible
-      return glyph.hit_test(geometry)
-    else
-      return null
 
   @define {
       x_range_name:       [ p.String,  'default' ]

@@ -75,15 +75,13 @@ describe "AxisView", ->
       y_range: new Range1d({start: 0, end: 1})
       toolbar: new Toolbar()
     })
-    plot_view = new plot.default_view({model: plot, parent: null})
     plot.add_layout(@axis, 'below')
     doc.add_root(plot)
-    plot_canvas_view = new plot.plot_canvas.default_view({model: plot.plot_canvas, parent: plot_view})
+    plot_canvas_view = new plot.plot_canvas.default_view({ 'model': plot.plot_canvas })
     sinon.stub(plot_canvas_view, 'update_constraints')
     @axis_view = new @axis.default_view({
       model: @axis
       plot_view: plot_canvas_view
-      parent: plot_canvas_view
     })
 
   it "_tick_extent should return the major_tick_out property", ->

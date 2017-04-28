@@ -76,18 +76,12 @@ export const
   ol     = _createElement("ol"),
   li     = _createElement("li");
 
-export function removeElement(element: HTMLElement): void {
-  const parent = element.parentNode
-  if (parent != null) {
-    parent.removeChild(element)
-  }
+export function show(element: HTMLElement): void {
+  element.style.display = ""
 }
 
-export function replaceWith(element: HTMLElement, replacement: HTMLElement) {
-  const parent = element.parentNode
-  if (parent != null) {
-    parent.replaceChild(replacement, element)
-  }
+export function hide(element: HTMLElement): void {
+  element.style.display = "none"
 }
 
 export function empty(element: HTMLElement): void {
@@ -95,14 +89,6 @@ export function empty(element: HTMLElement): void {
   while (child = element.firstChild) {
     element.removeChild(child)
   }
-}
-
-export function show(element: HTMLElement): void {
-  element.style.display = ""
-}
-
-export function hide(element: HTMLElement): void {
-  element.style.display = "none"
 }
 
 export function position(element: HTMLElement) {
@@ -117,5 +103,12 @@ export function offset(element: HTMLElement) {
   return {
     top:  rect.top  + window.pageYOffset - document.documentElement.clientTop,
     left: rect.left + window.pageXOffset - document.documentElement.clientLeft,
+  }
+}
+
+export function replaceWith(element: HTMLElement, replacement: HTMLElement) {
+  const parent = element.parentNode
+  if (parent != null) {
+    parent.replaceChild(replacement, element)
   }
 }

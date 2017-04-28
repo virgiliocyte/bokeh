@@ -15,7 +15,7 @@ export class ArrowView extends AnnotationView
     @set_data(@model.source)
 
   bind_bokeh_events: () ->
-    @listenTo(@model, 'change', () => @plot_view.request_render())
+    @listenTo(@model, 'change', @plot_view.request_render)
     @listenTo(@model.source, 'change', () ->
       @set_data(@model.source)
       @plot_view.request_render())
@@ -60,7 +60,7 @@ export class ArrowView extends AnnotationView
     # Next we call .clip on all the arrow heads, inside an initial canvas sized
     # rect, to create an "inverted" clip region for the arrow heads
     ctx.beginPath();
-    ctx.rect(0, 0, @canvas._width.value, @canvas._height.value)
+    ctx.rect(0, 0, @canvas.width, @canvas.height);
     if @model.end? then @_arrow_head(ctx, "clip", @model.end, @start, @end)
     if @model.start? then @_arrow_head(ctx, "clip", @model.start, @end, @start)
     ctx.closePath()

@@ -62,9 +62,7 @@ def abstract(cls):
     if not issubclass(cls, HasProps):
         raise TypeError("%s is not a subclass of HasProps" % cls.__name__)
 
-    # running python with -OO will discard docstrings -> __doc__ is None
-    if cls.__doc__ is not None:
-        cls.__doc__ += _ABSTRACT_ADMONITION
+    cls.__doc__ += _ABSTRACT_ADMONITION
 
     return cls
 
@@ -143,10 +141,7 @@ class MetaHasProps(type):
 
         if "__example__" in class_dict:
             path = class_dict["__example__"]
-
-            # running python with -OO will discard docstrings -> __doc__ is None
-            if "__doc__" in class_dict and class_dict["__doc__"] is not None:
-                class_dict["__doc__"] += _EXAMPLE_TEMPLATE % dict(path=path)
+            class_dict["__doc__"] += _EXAMPLE_TEMPLATE % dict(path=path)
 
         return super(MetaHasProps, meta_cls).__new__(meta_cls, class_name, bases, class_dict)
 

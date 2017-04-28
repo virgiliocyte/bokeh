@@ -15,8 +15,8 @@ export class SpanView extends AnnotationView
       @listenTo(@model, 'change:computed_location', @_draw_span)
     else
       if @model.render_mode == 'canvas'
-        @listenTo(@model, 'change', () => @plot_view.request_render())
-        @listenTo(@model, 'change:location', () => @plot_view.request_render())
+        @listenTo(@model, 'change', @plot_view.request_render)
+        @listenTo(@model, 'change:location', @plot_view.request_render)
       else
         @listenTo(@model, 'change', @render)
         @listenTo(@model, 'change:location', @_draw_span)
@@ -45,14 +45,14 @@ export class SpanView extends AnnotationView
 
     if @model.dimension == 'width'
       stop = canvas.vy_to_sy(@_calc_dim(loc, ymapper))
-      sleft = canvas.vx_to_sx(frame._left.value)
-      width = frame._width.value
+      sleft = canvas.vx_to_sx(frame.left)
+      width = frame.width
       height = @model.properties.line_width.value()
     else
-      stop = canvas.vy_to_sy(frame._top.value)
+      stop = canvas.vy_to_sy(frame.top)
       sleft = canvas.vx_to_sx(@_calc_dim(loc, xmapper))
       width = @model.properties.line_width.value()
-      height = frame._height.value
+      height = frame.height
 
     if @model.render_mode == "css"
       @el.style.top = "#{stop}px"

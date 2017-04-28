@@ -1,9 +1,9 @@
 import * as p from "core/properties"
-import {View} from "core/view"
+import {BokehView} from "core/bokeh_view"
 import {min, max} from "core/util/array"
 import {Model} from "../../model"
 
-export class ToolView extends View
+export class ToolView extends BokehView
 
   initialize: (options) ->
     super(options)

@@ -29,6 +29,8 @@ export class FontAwesomeIconView extends WidgetView
 
     return @
 
+  update_constraints: () -> null
+
 export class FontAwesomeIcon extends AbstractIcon
   type: "FontAwesomeIcon"
   default_view: FontAwesomeIconView

@@ -5,7 +5,7 @@ import * as p from "core/properties"
 export class ImageURLView extends GlyphView
   initialize: (options) ->
     super(options)
-    @listenTo(@model, 'change:global_alpha', () => @renderer.request_render())
+    @listenTo(@model, 'change:global_alpha', @renderer.request_render)
 
   _index_data: () ->
 
@@ -55,8 +55,8 @@ export class ImageURLView extends GlyphView
     # TODO (bev): take actual border width into account when clipping
     frame = @renderer.plot_view.frame
     ctx.rect(
-      frame._left.value+1, frame._bottom.value+1,
-      frame._width.value-2, frame._height.value-2,
+      frame.left+1, frame.bottom+1,
+      frame.width-2, frame.height-2,
     )
     ctx.clip()
 

@@ -1,6 +1,5 @@
 import * as $ from "jquery"
 
-import * as DOM from "core/dom"
 import {isFunction} from "core/util/types"
 
 # Cached regex to split keys for `delegate`.
@@ -17,13 +16,24 @@ export JQueryable = {
       el.className = classList.join(" ")
     return null
 
-  _createElement: () ->
-    el = DOM.createElement(@tagName, {id: @id, class: @className})
-    @$el = $(el)
-    @delegateEvents()
-    return el
-
   # START backbone
+
+  # Creates the `this.el` and `this.$el` references for this view using the
+  # given `el`. `el` can be a CSS selector or an HTML string, a jQuery
+  # context or an element. Subclasses can override this to utilize an
+  # alternative DOM manipulation API and are only required to set the
+  # `this.el` property.
+  _setElement: (el) ->
+    @$el = if el instanceof $ then el else $(el)
+    @el = @$el[0]
+
+  # Change the view's element (`this.el` property) and re-delegate the
+  # view's events on the new element.
+  setElement: (element) ->
+    @undelegateEvents()
+    @_setElement(element)
+    @delegateEvents()
+    return @
 
   # Set callbacks, where `this.events` is a hash of
   #

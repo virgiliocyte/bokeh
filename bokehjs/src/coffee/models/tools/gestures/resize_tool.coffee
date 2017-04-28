@@ -1,15 +1,14 @@
 import {GestureTool, GestureToolView} from "./gesture_tool"
-import {div, show, hide} from "core/dom"
+import {show, hide} from "core/dom"
 
 export class ResizeToolView extends GestureToolView
   className: "bk-resize-popup"
 
   initialize: (options) ->
     super(options)
-    @overlay = div()
-    wrapper = @plot_view.canvas_view.el
-    wrapper.appendChild(@overlay)
-    hide(@overlay)
+    wrapper = @plot_view.el.querySelector('div.bk-canvas-wrapper')
+    wrapper.appendChild(@el)
+    hide(@el)
     @active = false
     return null
 
@@ -29,18 +28,18 @@ export class ResizeToolView extends GestureToolView
       frame = @plot_view.frame
       left = canvas.vx_to_sx(frame.h_range.end-40)
       top = canvas.vy_to_sy(frame.v_range.start+40)
-      @overlay.style.position = "absolute"
-      @overlay.style.top = "#{top}px"
-      @overlay.style.left = "#{left}px"
-      show(@overlay)
+      @el.style.position = "absolute"
+      @el.style.top = "#{top}px"
+      @el.style.left = "#{left}px"
+      show(@el)
     else
-      hide(@overlay)
+      hide(@el)
     return @
 
   _pan_start: (e) ->
     canvas = @plot_view.canvas
-    @ch = canvas._height.value
-    @cw = canvas._width.value
+    @ch = canvas.height
+    @cw = canvas.width
     @plot_view.interactive_timestamp = Date.now()
     return null
 
@@ -52,8 +51,8 @@ export class ResizeToolView extends GestureToolView
   _pan_end: (e) ->
     @plot_view.push_state("resize", {
       dimensions: {
-        width: @plot_view.canvas._width.value
-        height: @plot_view.canvas._height.value
+        width: @plot_view.canvas.width
+        height: @plot_view.canvas.height
       }
     })
 

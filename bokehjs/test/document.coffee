@@ -9,7 +9,6 @@ sinon = require "sinon"
 js_version = utils.require("version").version
 {Models} = utils.require "base"
 {Model} = utils.require "model"
-{LayoutDOM} = utils.require "models/layouts/layout_dom"
 logging = utils.require "core/logging"
 p = utils.require "core/properties"
 
@@ -76,7 +75,7 @@ class ComplicatedModelWithConstructTimeChanges extends Model
 Models.register('ComplicatedModelWithConstructTimeChanges', ComplicatedModelWithConstructTimeChanges)
 
 
-class LayoutableModel extends LayoutDOM
+class LayoutableModel extends Model
   type: 'LayoutableModel'
 
   get_constraints: () ->
@@ -87,6 +86,10 @@ class LayoutableModel extends LayoutDOM
 
   get_constrained_variables: () ->
     {}
+
+  @internal {
+    layoutable: [ p.Bool, true ]
+  }
 Models.register('LayoutableModel', LayoutableModel)
 
 class ModelWithConstraint extends LayoutableModel
@@ -132,8 +135,8 @@ class ModelWithConstrainedVariables extends LayoutableModel
       height: @_height
     }
 
-  @override {
-    sizing_mode: 'scale_width'
+  @define {
+    sizing_mode: [ p.SizingMode, 'scale_width']
   }
 
 Models.register('ModelWithConstrainedVariables', ModelWithConstrainedVariables)
@@ -150,8 +153,8 @@ class ModelWithConstrainedWidthVariable extends LayoutableModel
       width: @_width
     }
 
-  @override {
-    sizing_mode: 'scale_width'
+  @define {
+    sizing_mode: [ p.SizingMode, 'scale_width']
   }
 
 Models.register('ModelWithConstrainedWidthVariable', ModelWithConstrainedWidthVariable)
@@ -169,8 +172,8 @@ class ModelWithConstrainedHeightVariable extends LayoutableModel
       height: @_height
     }
 
-  @override {
-    sizing_mode: 'scale_width'
+  @define {
+    sizing_mode: [ p.SizingMode, 'scale_width']
   }
 
 Models.register('ModelWithConstrainedHeightVariable', ModelWithConstrainedHeightVariable)
@@ -891,7 +894,6 @@ it "can destructively move", ->
     expect(Object.keys(root1.dict_of_list_prop).length).to.equal 1
     expect(_.values(root1.dict_of_list_prop)[0].length).to.equal 1
 
-  ###
   it "adds two constraints and two edit_variables on instantiation solver", ->
     d = new Document()
     s = d.solver()
@@ -1002,6 +1004,21 @@ it "can destructively move", ->
     d.add_root(new ModelWithEditVariableAndConstraint())
     expect(spy.calledOnce).is.true
 
+  it "add_root sets the _is_root property of model to true", ->
+    d = new Document()
+    root_model = new ModelWithConstrainedVariables()
+    expect(root_model._is_root).is.undefined
+    d.add_root(root_model)
+    expect(root_model._is_root).is.true
+
+  it "remove_root sets the _is_root property of model to false", ->
+    d = new Document()
+    root_model = new ModelWithConstrainedVariables()
+    d.add_root(root_model)
+    expect(root_model._is_root).is.true
+    d.remove_root(root_model)
+    expect(root_model._is_root).is.false
+
   # TODO(bird) - We're not using window - so need to find a new
   # way to test the size was set correctly.
   it.skip "resize suggests value for width and height of document", ->
@@ -1081,4 +1098,3 @@ it "can destructively move", ->
     d.resize()
     expect(spy.calledTwice).is.true  # NOTE double amount, for now
     expect(spy.calledWith('resize')).is.true
-  ###

@@ -135,13 +135,15 @@ export class ToolbarBox extends Box
   initialize: (options) ->
     super(options)
     @_toolbar = new ToolbarBoxToolbar(options)
-
-    @_horizontal = @toolbar_location in ['left', 'right']
-    @_sizeable = if not @_horizontal then @_height else @_width
+    if @toolbar_location in ['left', 'right']
+      @_horizontal = true
+      @_toolbar._sizeable = @_toolbar._width
+    else
+      @_horizontal = false
+      @_toolbar._sizeable = @_toolbar._height
 
   _doc_attached: () ->
     @_toolbar.attach_document(@document)
-    super()
 
   get_layoutable_children: () ->
     return [@_toolbar]

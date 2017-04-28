@@ -7,6 +7,8 @@ import bokeh.util.compiler as buc
 def test_nodejs_compile_coffeescript():
     assert buc.nodejs_compile("""(a, b) -> a + b""", "coffeescript", "some.coffee") == \
         dict(code="""\
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 (function (a, b) {
     return a + b;
 });
@@ -14,6 +16,8 @@ def test_nodejs_compile_coffeescript():
 
     assert buc.nodejs_compile("""some = require 'some/module'""", "coffeescript", "some.coffee") == \
         dict(code="""\
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var some;
 some = require('some/module');
 """, deps=["some/module"])
@@ -49,12 +53,16 @@ some = require('some/module');
 def test_nodejs_compile_javascript():
     assert buc.nodejs_compile("""function f(a, b) { return a + b; };""", "javascript", "some.js") == \
         dict(code="""\
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 function f(a, b) { return a + b; }
 ;
 """, deps=[])
 
     assert buc.nodejs_compile("""var some = require('some/module');""", "javascript", "some.js") == \
         dict(code="""\
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var some = require('some/module');
 """, deps=["some/module"])
 

@@ -22,9 +22,9 @@ export class ColorBarView extends AnnotationView
     @_set_canvas_image()
 
   bind_bokeh_events: () ->
-    @listenTo(@model, 'change:visible', () => @plot_view.request_render())
-    @listenTo(@model.ticker, 'change', () => @plot_view.request_render())
-    @listenTo(@model.formatter, 'change', () => @plot_view.request_render())
+    @listenTo(@model, 'change:visible', @plot_view.request_render)
+    @listenTo(@model.ticker, 'change', @plot_view.request_render)
+    @listenTo(@model.formatter, 'change', @plot_view.request_render)
     @listenTo(@model.color_mapper, 'change', () ->
       @_set_canvas_image()
       @plot_view.request_render()
@@ -32,8 +32,8 @@ export class ColorBarView extends AnnotationView
 
   _get_panel_offset: () ->
     # ColorBars draw from the top down, so set the y_panel_offset to _top
-    x = @model.panel._left.value
-    y = @model.panel._top.value
+    x = @model.panel._left._value
+    y = @model.panel._top._value
     return {x: x, y: -y}
 
   _get_size: () ->
@@ -45,9 +45,6 @@ export class ColorBarView extends AnnotationView
       return bbox.width
 
   _set_canvas_image: () ->
-    if not @model.color_mapper?
-      return
-
     palette = @model.color_mapper.palette
 
     if @model.orientation == 'vertical'
@@ -139,7 +136,7 @@ export class ColorBarView extends AnnotationView
     return {sx: sx, sy: sy}
 
   render: () ->
-    if not @model.visible or not @model.color_mapper?
+    if not @model.visible
       return
 
     ctx = @plot_view.canvas_view.ctx
@@ -298,8 +295,8 @@ export class ColorBarView extends AnnotationView
     frame = @plot_view.frame
 
     switch panel.side
-      when "left", "right" then yoff = Math.abs(panel._top.value - frame._top.value)
-      when "above", "below" then xoff = Math.abs(frame._left.value)
+      when "left", "right" then yoff = Math.abs(panel.top - frame.top)
+      when "above", "below" then xoff = Math.abs(frame.left)
 
     return {x: xoff, y: yoff}
 
@@ -404,8 +401,8 @@ export class ColorBar extends Annotation
       * The parallel frame dimension * 0.80
     ###
 
-    frame_height = @plot.plot_canvas.frame._height.value
-    frame_width = @plot.plot_canvas.frame._width.value
+    frame_height = @plot.plot_canvas.frame.height
+    frame_width = @plot.plot_canvas.frame.width
     title_extent = @_title_extent()
 
     switch @orientation

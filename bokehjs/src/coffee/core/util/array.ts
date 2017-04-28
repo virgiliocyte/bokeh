@@ -10,7 +10,7 @@ export function copy<T>(array: Array<T> /*| TypedArray*/): Array<T> {
 }
 
 export function concat<T>(arrays: Array<Array<T>>): Array<T> {
-  return ([] as T[]).concat(...arrays)
+  return [].concat(...arrays)
 }
 
 export function contains<T>(array: Array<T>, value: T): boolean {
@@ -109,15 +109,14 @@ export function min(array: Array<number>): number {
 }
 
 export function minBy<T>(array: Array<T>, key: (item: T) => number): T {
-  if (array.length == 0)
-    throw new Error("minBy() called with an empty array")
+  let value: T
+  let result: T
+  let computed: number
+  let resultComputed = Infinity
 
-  let result = array[0]
-  let resultComputed = key(result)
-
-  for (let i = 1, length = array.length; i < length; i++) {
-    const value = array[i]
-    const computed = key(value)
+  for (let i = 0, length = array.length; i < length; i++) {
+    value = array[i]
+    computed = key(value)
     if (computed < resultComputed) {
       result = value
       resultComputed = computed
@@ -142,15 +141,14 @@ export function max(array: Array<number>): number {
 }
 
 export function maxBy<T>(array: Array<T>, key: (item: T) => number): T {
-  if (array.length == 0)
-    throw new Error("maxBy() called with an empty array")
+  let value: T
+  let result: T
+  let computed: number
+  let resultComputed = -Infinity
 
-  let result = array[0]
-  let resultComputed = key(result)
-
-  for (let i = 1, length = array.length; i < length; i++) {
-    const value = array[i]
-    const computed = key(value)
+  for (let i = 0, length = array.length; i < length; i++) {
+    value = array[i]
+    computed = key(value)
     if (computed > resultComputed) {
       result = value
       resultComputed = computed
